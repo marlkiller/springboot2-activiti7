@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zjialin<br>
@@ -40,6 +37,9 @@ public class TaskController extends BaseController {
         try {
             //指定个人任务查询
             List<Task> taskList = taskService.createTaskQuery().taskAssignee(assignee).list();
+
+            // assignee 不知道 assignee 为何物
+            taskList = taskService.createTaskQuery().taskCreatedBefore(new Date()).list();
             if (CollectionUtil.isNotEmpty(taskList)) {
                 List<Map<String, String>> resultList = new ArrayList<>();
                 for (Task task : taskList) {

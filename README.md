@@ -1,12 +1,6 @@
 1：本项目集成了springboot7+activti7+流程设计器一体
 
-2：修改application.properties 里面数据库配置即可启动
-
-3：设计器访问地址：http://localhost:port/activiti/create
-
-4：接口地址：http://localhost:port/doc.html
-
-4：关于表解释：
+2：关于表解释：
 
     Activiti的后台是有数据库的支持，所有的表都以ACT_开头。 第二部分是表示表的用途的两个字母标识。 用途也和服务的API对应。
     ACT_RE_*: 'RE'表示repository。 这个前缀的表包含了流程定义和流程静态资源 （图片，规则，等等）。
@@ -35,8 +29,50 @@
     通用数据表
     1) act_ge_bytearray二进制数据表
     2) act_ge_property属性数据表存储整个流程引擎级别的数据,初始化表结构时，会默认插入三条记录
-    
-    
-    
-    
-    
+
+
+1. create model
+
+modelId 7d42000b-2949-11ea-b96c-a6d7d2967752
+processKey process_key
+
+
+http://127.0.0.1:9090/doc.html
+2. 部署流程
+modelId 7d42000b-2949-11ea-b96c-a6d7d2967752
+processName processName_processName
+
+{
+  "message": "部署成功",
+  "code": "200",
+  "data": {
+    "deploymentName": "手动部署",
+    "deploymentId": "a381c24e-294a-11ea-b96c-a6d7d2967752"
+  }
+}
+
+3. 启动流程 , 启动后方可查询
+processKey process_key
+startUserKey startUserKey_startUserKey
+
+{
+  "message": "启动成功",
+  "code": "200",
+  "data": {
+    "processId": "0e92f721-294b-11ea-b96c-a6d7d2967752",
+    "processDefinitionKey": "process_key:1:a3934d80-294a-11ea-b96c-a6d7d2967752"
+  }
+}
+
+
+
+4. 人物转办 (之后 可以根据 userKey 查询)
+task_id 0e954117-294b-11ea-b96c-a6d7d2967752
+userKey startUserKey_startUserKey_startUserKey_startUserKey
+
+
+5, 完成任务
+task_id 0e954117-294b-11ea-b96c-a6d7d2967752
+
+
+
