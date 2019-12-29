@@ -69,13 +69,25 @@ public class TestDemo {
         // 找key的方法  1：bpmn文件中的id，它对应的值就是key 2：直接看数据库中流程定义表act_re_procdet的key值）
         // ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process_id", "businessKey", variables);
         ProcessDefinition processDefinition =
-                processEngine.getRepositoryService().createProcessDefinitionQuery().deploymentId("327b7c86-29e3-11ea-8893-064a7eedaca9").singleResult();
+                processEngine.getRepositoryService().createProcessDefinitionQuery().deploymentId("6f4fe91f-29ec-11ea-a42a-3a3f4ad757e5").singleResult();
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), "businessKey", variables);
         // 输出实例的相关信息
         System.out.println("流程部署ID=" + processInstance.getDeploymentId());//null
         System.out.println("流程定义ID=" + processInstance.getProcessDefinitionId());//process_id:1:32960968-29e3-11ea-8893-064a7eedaca9
-        System.out.println("流程实例ID=" + processInstance.getId());// b4808dd0-29e3-11ea-8279-064a7eedaca9
+        System.out.println("流程实例ID=" + processInstance.getId());// 90e18253-29ec-11ea-880f-3a3f4ad757e5
         System.out.println("流程活动ID=" + processInstance.getActivityId());//获取当前具体执行的某一个节点的ID(null)
+
+        // 暂停/继续 processInstance
+        // boolean suspend = processInstance.isSuspended();
+        // if (suspend) {
+        //     //如果暂停则激活
+        //     runtimeService.activateProcessInstanceById(processInstance.getId());
+        //     System.out.println("流程实例：" + processInstance.getId() + "激活");
+        // } else {
+        //     //如果激活则挂起
+        //     runtimeService.suspendProcessInstanceById(processInstance.getId());
+        //     System.out.println("流程实例：" + processInstance.getId() + "挂起");
+        // }
     }
 
 
@@ -99,7 +111,7 @@ public class TestDemo {
 
         // 根据实例 id 查询
         for (Task task : taskService.createTaskQuery()
-                .processInstanceId("b4808dd0-29e3-11ea-8279-064a7eedaca9").list()) {
+                .processInstanceId("90e18253-29ec-11ea-880f-3a3f4ad757e5").list()) {
             System.out.println(task.getId()); // d31164bd-2956-11ea-af98-feaf48b96e42
 
             // 转让, 这里正式开始 提交请假单
@@ -120,8 +132,8 @@ public class TestDemo {
         // 根据 processDefinitionKey 查询
         // 根据流程定义的key以及负责人 assignee 来实现当前用户的任务列表查询
         List<Task> taskList = taskService.createTaskQuery()
-                .processDefinitionKey("process_id")
-                .processInstanceId("b4808dd0-29e3-11ea-8279-064a7eedaca9")
+                // .processDefinitionKey("process_id")
+                .processInstanceId("90e18253-29ec-11ea-880f-3a3f4ad757e5")
                 .processInstanceBusinessKey("businessKey")
                 .taskAssignee("fuck")
                 .includeProcessVariables()
@@ -139,11 +151,14 @@ public class TestDemo {
             System.out.println("任务名称=" + task.getName());
             System.out.println(task.getProcessVariables());
 
+            // taskService.setVariable(task.getId(),"audit",0);
+
             // 任务完成
             taskService.complete(task.getId(), task.getProcessVariables());
             System.out.println("人物完成：已经提交");
 
             taskList = taskService.createTaskQuery()
+                    .processInstanceId("90e18253-29ec-11ea-880f-3a3f4ad757e5")
                     .processDefinitionKey("process_id")
                     .taskAssignee("fuck")
                     .includeProcessVariables()
