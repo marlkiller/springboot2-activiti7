@@ -24,6 +24,10 @@ public class TestDemo {
 
     /**
      * 1. 根据流程图 部署
+     * 影响的activiti表有哪些
+     * act_re_deployment 部署信息
+     * act_re_procdef    流程定义的一些信息
+     * act_ge_bytearray  流程定义的bpmn文件以及png文件
      */
     @Test
     public void deploy() {
@@ -45,6 +49,15 @@ public class TestDemo {
 
     /**
      * 2. 部署后获取流程实例
+     * 前提是先已经完成流程定义的部署工作
+     * 背后影响的表：
+     * act_hi_actinst      已完成的活动信息
+     * act_hi_identitylink   参与者信息
+     * act_hi_procinst     流程实例
+     * act_hi_taskinst     任务实例
+     * act_ru_execution    执行表
+     * act_ru_identitylink   参与者信息
+     * act_ru_task   任务表
      */
     @Test
     public void start() {
@@ -70,6 +83,14 @@ public class TestDemo {
      * 根据流程实例获取 task
      * 将 task 移交给某人
      * 做查询
+     * 处理当前用户的任务列表
+     * 背后操作到的表：
+     * act_hi_actinst
+     * act_hi_identitylink
+     * act_hi_taskinst
+     * act_ru_execution
+     * act_ru_identitylink
+     * act_ru_task //只放当前要执行的任务
      */
     @Test
     public void submitLeaveRequest() {
