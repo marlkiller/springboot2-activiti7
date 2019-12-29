@@ -1,6 +1,7 @@
 import com.zjialin.workflow.Application;
 import org.activiti.engine.*;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class TestDemo {
 
         // 输出部署的一些信息
         System.out.println(deployment.getName()); // 请假申请单流程
-        System.out.println(deployment.getId()); // a14b9e1b-2963-11ea-a6e9-86dbe108bd4e
+        System.out.println(deployment.getId()); // 327b7c86-29e3-11ea-8893-064a7eedaca9
     }
 
 
@@ -53,12 +54,14 @@ public class TestDemo {
         variables.put("startUserKey", "startUserKey");
         // 创建流程实例(关键步骤)即 启动流程实例
         // 找key的方法  1：bpmn文件中的id，它对应的值就是key 2：直接看数据库中流程定义表act_re_procdet的key值）
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process_id", "businessKey", variables);
-        // ProcessInstance processInstance = runtimeService.startProcessInstanceById("aec4c179-2964-11ea-98b5-86dbe108bd4e", "businessKey", variables);
+        // ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process_id", "businessKey", variables);
+        ProcessDefinition processDefinition =
+                processEngine.getRepositoryService().createProcessDefinitionQuery().deploymentId("327b7c86-29e3-11ea-8893-064a7eedaca9").singleResult();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), "businessKey", variables);
         // 输出实例的相关信息
         System.out.println("流程部署ID=" + processInstance.getDeploymentId());//null
-        System.out.println("流程定义ID=" + processInstance.getProcessDefinitionId());//process_id:2:6396446b-2956-11ea-8ff9-feaf48b96e42
-        System.out.println("流程实例ID=" + processInstance.getId());// 44e22b4f-2965-11ea-a33d-86dbe108bd4e
+        System.out.println("流程定义ID=" + processInstance.getProcessDefinitionId());//process_id:1:32960968-29e3-11ea-8893-064a7eedaca9
+        System.out.println("流程实例ID=" + processInstance.getId());// b4808dd0-29e3-11ea-8279-064a7eedaca9
         System.out.println("流程活动ID=" + processInstance.getActivityId());//获取当前具体执行的某一个节点的ID(null)
     }
 
@@ -75,7 +78,7 @@ public class TestDemo {
 
         // 根据实例 id 查询
         for (Task task : taskService.createTaskQuery()
-                .processInstanceId("44e22b4f-2965-11ea-a33d-86dbe108bd4e").list()) {
+                .processInstanceId("b4808dd0-29e3-11ea-8279-064a7eedaca9").list()) {
             System.out.println(task.getId()); // d31164bd-2956-11ea-af98-feaf48b96e42
 
             // 转让, 这里正式开始 提交请假单
@@ -84,6 +87,7 @@ public class TestDemo {
             map.put("name", "voidm");
             map.put("age", 19);
             System.out.println(map);
+            // 提交成功后, 触发器会将 Assignee 设置为 fuck
             taskService.complete(task.getId(), map);
         }
     }
@@ -96,11 +100,14 @@ public class TestDemo {
         // 根据流程定义的key以及负责人 assignee 来实现当前用户的任务列表查询
         List<Task> taskList = taskService.createTaskQuery()
                 .processDefinitionKey("process_id")
+                .processInstanceId("b4808dd0-29e3-11ea-8279-064a7eedaca9")
+                .processInstanceBusinessKey("businessKey")
                 .taskAssignee("fuck")
                 .includeProcessVariables()
                 .list();//这里还有一个查询唯一结果的方法：singleResult();、还有分页查询listPage(index,limit);
         // 任务列表展示
         for (Task task : taskList) {
+            System.out.println("task.getProcessDefinitionId() = " + task.getProcessDefinitionId()); // process_id:1:32960968-29e3-11ea-8893-064a7eedaca9
             //查的act_hi_procinst表的id
             System.out.println("流程实例ID=" + task.getProcessInstanceId());
             //查的act_hi_taskinst表的id
@@ -111,6 +118,7 @@ public class TestDemo {
             System.out.println("任务名称=" + task.getName());
             System.out.println(task.getProcessVariables());
 
+            // 任务完成
             taskService.complete(task.getId(), task.getProcessVariables());
             System.out.println("人物完成：已经提交");
 

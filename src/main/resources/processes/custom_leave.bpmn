@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1577525830150" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
   <process id="process_id" isClosed="false" isExecutable="true" name="process_name" processType="None">
-    <startEvent id="_2" name="StartEvent"/>
-    <userTask activiti:exclusive="true" id="apv_id_1" name="填写假条">
-      <extensionElements>
-        
-      </extensionElements>
-    </userTask>
-    <endEvent id="_4" name="EndEvent"/>
-    <sequenceFlow id="_5" sourceRef="_2" targetRef="apv_id_1"/>
+    <startEvent id="start_id" name="StartEvent"/>
+    <userTask activiti:exclusive="true" id="apv_id_1" name="填写假条"/>
+    <endEvent id="stop_id" name="EndEvent"/>
+    <sequenceFlow id="_5" sourceRef="start_id" targetRef="apv_id_1"/>
     <userTask activiti:exclusive="true" id="apv_id_2" name="领导审批">
       <extensionElements>
         <activiti:taskListener class="MyTaskListener" event="create"/>
       </extensionElements>
     </userTask>
     <sequenceFlow id="_7" sourceRef="apv_id_1" targetRef="apv_id_2"/>
-    <sequenceFlow id="_8" sourceRef="apv_id_2" targetRef="_4"/>
+    <sequenceFlow id="_8" sourceRef="apv_id_2" targetRef="stop_id"/>
   </process>
   <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
     <bpmndi:BPMNPlane bpmnElement="process_id">
-      <bpmndi:BPMNShape bpmnElement="_2" id="Shape-_2">
+      <bpmndi:BPMNShape bpmnElement="start_id" id="Shape-start_id">
         <omgdc:Bounds height="32.0" width="32.0" x="250.0" y="120.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
@@ -31,7 +27,7 @@
           <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_4" id="Shape-_4">
+      <bpmndi:BPMNShape bpmnElement="stop_id" id="Shape-stop_id">
         <omgdc:Bounds height="32.0" width="32.0" x="280.0" y="430.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
@@ -43,21 +39,21 @@
           <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="_2" targetElement="apv_id">
+      <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="_2" targetElement="apv_id_1">
         <omgdi:waypoint x="271.0" y="151.19868415357067"/>
         <omgdi:waypoint x="271.0" y="275.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="apv_id" targetElement="_3">
+      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="apv_id_1" targetElement="apv_id_2">
         <omgdi:waypoint x="290.0" y="330.0"/>
         <omgdi:waypoint x="290.0" y="350.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="_3" targetElement="_4">
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="apv_id_2" targetElement="_4">
         <omgdi:waypoint x="296.0" y="405.0"/>
         <omgdi:waypoint x="296.0" y="430.0"/>
         <bpmndi:BPMNLabel>
