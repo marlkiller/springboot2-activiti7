@@ -1,6 +1,6 @@
 FROM gitpod/workspace-full
                     
-VOLUME /tmp 
+#VOLUME /tmp 
 ADD target/SpringBoot2-Activiti7-1.0.0.jar /SpringBoot2-Activiti7-1.0.0.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/SpringBoot2-Activiti7-1.0.0.jar"]
 
