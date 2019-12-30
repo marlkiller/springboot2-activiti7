@@ -1,4 +1,8 @@
+# exposed ports
+ports:
+- port: 8080
+  onOpen: open-preview
+# start up tasks
 tasks:
-  - init: mvn package -DskipTests=true
-image:
-  file: .gitpod.Dockerfile
+- init: ./mvnw package -DskipTests
+  command: java -jar target/*.jar
