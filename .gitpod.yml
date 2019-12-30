@@ -5,6 +5,6 @@ ports:
 # start up tasks
 tasks:
 - init: mvn package -DskipTests
-  command: java -jar target/*.jar
+#  command: java -jar target/*.jar
 image:
   file: .gitpod.dockerfile
