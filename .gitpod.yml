@@ -4,5 +4,5 @@ ports:
   onOpen: open-preview
 # start up tasks
 tasks:
-- init: ./mvnw package -DskipTests
+- init: mvn package -DskipTests
   command: java -jar target/*.jar
